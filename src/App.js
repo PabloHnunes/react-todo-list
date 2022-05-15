@@ -1,25 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import express from "express";
+import db from "./config/dbConnect.js";
+import routes from "./routes/index.js";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+db.on("error", console.log.bind(console, 'Erro de conexão'));
+db.once("open", () => {
+    console.log("Conexão com o banco feita com sucesso!");
+});
 
-export default App;
+const app = express();
+
+app.use(express.json());
+
+routes(app);
+
+export default app;
